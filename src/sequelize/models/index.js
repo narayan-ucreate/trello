@@ -5,7 +5,7 @@ const createSequelize = () => {
   var Sequelize = require('sequelize');
   var basename  = path.basename(__filename);
   var env       = process.env.NODE_ENV || 'development';
-  var config    = require(__dirname + '/../database.json')[env];
+  var config    = require(__dirname + '/../database.js')[env];
   var db        = {};
   
   if (config.use_env_variable) {
