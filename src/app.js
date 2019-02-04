@@ -22,6 +22,9 @@ const createApp = ({
             router,
             registeredServices
         }));
+        app.use('/', function(req, res) {
+            res.send('hi')
+        })
 
     }
     app.use(bodyParser.urlencoded({
