@@ -9,6 +9,7 @@ const {
   port,
   environment
 } = require('./src/config');
+console.log('this is port'+port)
 const { createSequelize } = require('./src/sequelize/models/index');
 const {
   createApp,
