@@ -1,4 +1,17 @@
-const boardService = ({ registeredRepos : { boardRepo: { isBoardAlreadyExist, createBoard, boardInfo, updateSyncColumn } }, common : { acceptedTrelloEvent }}) => { 
+const boardService = (
+    { 
+        registeredRepos : { 
+            boardRepo: {
+                 isBoardAlreadyExist,
+                 createBoard,
+                 boardInfo,
+                 updateSyncColumn,
+                 getBoards 
+                }
+            }, common : {
+                acceptedTrelloEvent
+             }
+            }) => { 
     const createBoardIfNotExist = async ( inputs ) => {
         const { id, name } = inputs.model;
         const { translationKey } = inputs.action.display;
@@ -13,9 +26,20 @@ const boardService = ({ registeredRepos : { boardRepo: { isBoardAlreadyExist, cr
         return { boardInfo : await boardInfo(boardId) };
     }
 
+    const getBoardsService = async () => {
+        return getBoards();
+    }
+
     const updateColumn = async (data, id) => {
             return await updateSyncColumn(data, id);
     }
-    return { createBoardIfNotExist, getBoardInfo, updateColumn };
+
+    const createBoardIfNotExistApi = async ({id, name }) => {
+        const boardInfo = await isBoardAlreadyExist(id);
+        !!boardInfo === false && await createBoard({id , name });
+        return !!boardInfo;
+    }
+
+    return { createBoardIfNotExist, getBoardInfo, updateColumn, getBoardsService, createBoardIfNotExistApi };
 }
 module.exports = { boardService };

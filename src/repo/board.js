@@ -13,8 +13,11 @@ const boardRepo = ({ sequelize : { Board } }) => {
         return Board.update(data, { where : { id } });
     }
 
+    const getBoards = () => {
+        return Board.findAll();
+    }
     
-    return { isBoardAlreadyExist, createBoard, boardInfo, updateSyncColumn }
+    return { isBoardAlreadyExist, createBoard, boardInfo, updateSyncColumn, getBoards }
 }
 
 module.exports = { boardRepo }

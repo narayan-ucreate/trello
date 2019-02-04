@@ -1,4 +1,6 @@
 const bodyParser = require("body-parser");
+const path = require('path');
+
 const {
     registerWebHooksRoutes
 } = require('./routes/index');
@@ -22,10 +24,16 @@ const createApp = ({
             router,
             registeredServices
         }));
-        app.use('/', function(req, res) {
-            res.send('hi')
-        })
+        app.get("/index.html", function (req, res) {
+           res.sendFile(path.join(__dirname, '../views/index.html'));
+        });
+        app.get('/:boardId/details.html', function (req, res) {
+            const { boardId } = req.params;
+            res.sendFile(path.join(__dirname, '../views/index.html'));
+         });
 
+
+       
     }
     app.use(bodyParser.urlencoded({
         extended: true

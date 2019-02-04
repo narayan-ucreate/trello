@@ -111,17 +111,12 @@ const trelloService = ({
                 found = !! found;
             }
         })
-        console.log('status '+found)
         return found;
     }
 
     const moveTrelloCardToPreviousColumn = async (cardId, idList, postion) => {
         const url = `https://api.trello.com/1/cards/${cardId}?idList=${idList}&pos=${postion}&key=${trello_api_key}&token=${trello_token}`
-        const {
-            data
-        } = await axios.put(url)
-        // https://api.trello.com/1/cards/mAD4ofPd?idList=5c3343da045c31529830d550&pos=589823&key=1185720a73f1ce20acf6d2b58d8187e9&token=214b64709607a5915854611da67de92ca5add4fcae051892ae24b896296cddaa
-
+        await axios.put(url)
     }
 
     const getTrelloCardDetails = async (cardId) => {
@@ -130,13 +125,26 @@ const trelloService = ({
             data
         } = await axios.get(url)
         return data;
-
     }
 
+    const getTrelloBoardDetails = async (boardId) => {
+        const url = `https://api.trello.com/1/boards/${boardId}?key=${trello_api_key}&token=${trello_token}`
+        const {
+            data
+        } = await axios.get(url)
+        return data;
+    }
 
+    const updateTrelloBoardWebHooks = async (input) => {
+        const url = `https://api.trello.com/1/tokens/${trello_token}/webhooks/?key=${trello_api_key}`
+        const {
+            data
+        } = await axios.post(url, input)
+        return data;
+    }
+    
 
-
-
+    
     return {
         createTrelloMemberIfNotExist,
         createTrelloLabelIfNotExist,
@@ -145,7 +153,9 @@ const trelloService = ({
         attachTrelloMemberToCard,
         checkTrelloCheckList,
         moveTrelloCardToPreviousColumn,
-        getTrelloCardDetails
+        getTrelloCardDetails,
+        getTrelloBoardDetails,
+        updateTrelloBoardWebHooks
     }
 };
 module.exports = {

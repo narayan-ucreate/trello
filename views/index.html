@@ -1,0 +1,98 @@
+<link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+<script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+<script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
+
+<!------ Include the above in your HEAD tag ---------->
+<style>
+.trash { color:rgb(209, 91, 71); }
+.flag { color:rgb(248, 148, 6); }
+.panel-body { padding:0px; }
+.panel-footer .pagination { margin: 0; }
+.panel .glyphicon,.list-group-item .glyphicon { margin-right:5px; }
+.panel-body .radio, .checkbox { display:inline-block;margin:0px; }
+.panel-body input[type=checkbox]:checked + label { text-decoration: line-through;color: rgb(128, 144, 160); }
+.list-group-item:hover, a.list-group-item:focus {text-decoration: none;background-color: rgb(245, 245, 245);}
+.list-group { margin-bottom:0px; }
+</style>
+<div class="container">
+    <div class="row">
+        <div class="">
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    Boards
+                    <div class="pull-right action-buttons">
+                        <div class="btn-group pull-right">
+                            <button type="button" class="btn btn-default" data-toggle="modal" data-target="#create_board">
+                                 Create Board
+                            </button>
+                            <ul class="dropdown-menu slidedown">
+                                <li><a href="http://www.jquery2dotnet.com"><span class="glyphicon glyphicon-pencil"></span>Edit</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="panel-body">
+                    <ul class="list-group board-content">                     
+                        
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade" id="create_board" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">Create Board</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="well">
+                    <form id="createBoardForm" method="POST">
+                        <div class="form-group">
+                            <label for="password" class="control-label">Board Url</label>
+                            <input type="board_url" class="form-control" id="board_url" name="board_url" value="" required="" title="Please trello board name">
+                            <span class="help-block"></span>
+                        </div>                      
+                        <button type="submit" class="btn btn-success btn-block" id="create_board">Create Board</button>
+                    </form>
+                </div>
+            </div>
+      </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<script>
+$(document).ready(function() {
+    var website_url = 'http://localhost:4001/api';
+    $.get(website_url+'/boards', function(response) {
+        var content = '';
+       response.forEach(function(board) {
+             content +=`<li class="list-group-item">
+                            <a target="_blank" href="/${board.id}/details.html">${board.name}</a>
+                           <div class="pull-right action-buttons">
+                                <a  href="javascript:void(0)"><span class="glyphicon glyphicon-pencil"></span></a>
+                            </div>
+                        </li>
+                        `;
+       });
+       $('.board-content').html(content);
+    })
+
+$('#createBoardForm').on('click', function() {
+
+});
+   
+})
+</script>
