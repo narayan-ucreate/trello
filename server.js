@@ -7,6 +7,7 @@ const { registerService } = require('./src/services/index')
 const common = { acceptedTrelloEvent };
 const {
   port,
+  environment
 } = require('./src/config');
 const { createSequelize } = require('./src/sequelize/models/index');
 const {
@@ -32,13 +33,16 @@ createApp({
 
 
 
-   console.log('here');
-  const ngrok = require('ngrok');
-  ngrok.authtoken('2ryj3WTudtXLAr4SCFova_6CLTxrSz9jbVyK6NVpiyo', function (err, token) {});
-  ngrok.connect(port, function (err, url) {
-    console.log('this')
-    console.log(url);
-  });
+   if (environment === 'local') {
+       const ngrok = require('ngrok');
+      ngrok.authtoken('2ryj3WTudtXLAr4SCFova_6CLTxrSz9jbVyK6NVpiyo', function (err, token) {});
+      ngrok.connect(port, function (err, url) {
+        console.log('this')
+        console.log(url);
+      });
+   }
+
 
 app.listen(port);
+console.log('application running on port this'+port);
 module.exports = app;
