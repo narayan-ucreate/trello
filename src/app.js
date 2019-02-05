@@ -29,7 +29,7 @@ const createApp = ({
         });
         app.get('/:boardId/details.html', function (req, res) {
             const { boardId } = req.params;
-            res.sendFile(path.join(__dirname, '../views/index.html'));
+            res.sendFile(path.join(__dirname, '../views/details.html'));
          });
 
 

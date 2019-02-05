@@ -1,9 +1,13 @@
-const listService = ({ registeredRepos : { listRepo: { isListAlreadyExist, createList } }}) => { 
+const listService = ({ registeredRepos : { listRepo: { isListAlreadyExist, createList }, listRepo : { getBoardList } } }) => { 
     const createListifNotExist = async ( inputs, boardId ) => {
         const { id, name } = inputs.action.data.list;
         !! await isListAlreadyExist(id, boardId) === false && await createList({id , name, boardId });
         return true;
     }
-    return { createListifNotExist };
+
+    const getBoardListService = (boardId) => {
+            return getBoardList(boardId);
+    }
+    return { createListifNotExist, getBoardListService };
 }
 module.exports = { listService };

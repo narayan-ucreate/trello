@@ -7,6 +7,9 @@ module.exports = (sequelize, DataTypes) => {
   }, {});
   Card.associate = function(models) {
     // associations can be defined here
+    Card.hasMany(models.CardMoveHistory)
+    Card.hasMany(models.CardMember, {foreignKey: 'cardId'})
+    
   };
   return Card;
 };

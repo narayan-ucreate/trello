@@ -7,6 +7,7 @@ module.exports = (sequelize, DataTypes) => {
     memberId: DataTypes.STRING
   }, {});
   CardMoveHistory.associate = function(models) {
+    CardMoveHistory.belongsTo(models.Card, {foreignKey: 'cardId'})
     // associations can be defined here
   };
   return CardMoveHistory;

@@ -6,7 +6,11 @@ const listRepo = ({ sequelize : { List } }) => {
         return List.create(data)
     }
 
-    return { isListAlreadyExist, createList}
+    const getBoardList = (boardId) => {
+        return List.findAll({ where : { boardId }, attributes : ['id', 'name'] })
+    }
+    
+    return { isListAlreadyExist, createList, getBoardList}
 }
 
 module.exports = { listRepo }

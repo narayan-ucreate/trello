@@ -75,7 +75,7 @@
 
 <script>
 $(document).ready(function() {
-    var website_url = 'http://localhost:4001/api';
+    var website_url = 'https://ucreate-trello.herokuapp.com/api';
     $.get(website_url+'/boards', function(response) {
         var content = '';
        response.forEach(function(board) {

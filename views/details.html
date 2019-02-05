@@ -1,0 +1,108 @@
+<link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+<script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+<script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
+
+<!------ Include the above in your HEAD tag ---------->
+<style>
+    .trash { color:rgb(209, 91, 71); }
+.flag { color:rgb(248, 148, 6); }
+.panel-body { padding:0px; }
+.panel-footer .pagination { margin: 0; }
+.panel .glyphicon,.list-group-item .glyphicon { margin-right:5px; }
+.panel-body .radio, .checkbox { display:inline-block;margin:0px; }
+.panel-body input[type=checkbox]:checked + label { text-decoration: line-through;color: rgb(128, 144, 160); }
+.list-group-item:hover, a.list-group-item:focus {text-decoration: none;background-color: rgb(245, 245, 245);}
+.list-group { margin-bottom:0px; }
+</style>
+<div class="container">
+    <div class="row">
+        <div class="">
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    Boards Report
+                    <div class="pull-right action-buttons">
+                        <div class="btn-group pull-right">
+
+                            <ul class="dropdown-menu slidedown">
+                                <li><a href="http://www.jquery2dotnet.com"><span class="glyphicon glyphicon-pencil"></span>Edit</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <table class="table table-board">
+                    <tr>
+                        <td>
+                            <label>Column From</label>
+                            <select class="form-control list-items" id="listFromId">
+
+                            </select>
+                        </td>
+                        <td>
+                            <label>Column To</label>
+                            <select class="form-control list-items" id="ListToId">
+
+                            </select>
+                        </td>
+                        <td>
+                            <label>Start Date</label>
+                            <input type="date" class="form-control" id="startDate"></td>
+                        <td>
+                            <label>End Date</label>
+                            <input  type="date" class="form-control"  id="endDate"></td>
+                        <td><br><button class="btn btn-success" id="get-report"> Get Report </button></td>
+                    </tr>
+                </table>
+                <div class="panel-body">
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>
+                                    Card Name
+                                </th>
+                                <th>
+                                    No. Of occurrence
+                                </th>
+
+                                <th>Members</th>
+                            </tr>
+                        </thead>
+                        <tbody class="result">
+                            <tr >
+                                <td colspan="3"> Result will display here</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $(document).ready(function () {
+        var url = location.href;
+        url = url.split('/');
+        var boardId = url[url.length - 2];
+        var website_url = 'https://ucreate-trello.herokuapp.com/api';
+        $.get(website_url + '/get-columns/' + boardId, function (response) {
+            var content = '';
+            response.forEach(function (list) {
+                content += `<option value="${list.id}">${list.name}</option>`;
+            });
+            $('.list-items').html(content);
+        })
+
+        $('#get-report').on('click', function () {
+            var listFromId = $('#listFromId option:selected').val();
+            var ListToId = $('#ListToId option:selected').val();
+            $.get(`${website_url}/card-move-history-report?listFromId=${listFromId}&ListToId=${ListToId}&startDate=${$('#startDate').val()}&endDate=${$('#endDate').val()}`,
+                function (response) {
+                    var content = '';
+                    response.forEach(function (card) {
+                        var members = card.members.map(member => member.Member.name).join(', ');
+                        content += `<tr><td>${card.cardName}</td><td>${card.no_of_occurrence}</td><td>${members}</td><tr>`;
+                    });
+                    $('.result').html(content);
+                })
+        });
+    })
+</script>

@@ -6,6 +6,7 @@ const cardMoveHistoryService = ({ registeredRepos : { cardMoveHistoryRepo: { cre
         ((!!response === true && data.listBefore.id === response.listFromId && data.listAfter.id === response.ListToId) === false) && 
           createHistory({cardId : data.card.id, listFromId : data.listBefore.id, ListToId : data.listAfter.id, memberId: action.memberCreator.id })
         ;
+        
         return true;
     }
 

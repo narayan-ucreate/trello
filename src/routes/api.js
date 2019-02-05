@@ -15,6 +15,9 @@ const registerApisRoutes = ({
         createTrelloListIfNotExist, 
         createTrelloMemberIfNotExist,
         updateTrelloBoardWebHooks
+      },
+      listService : {
+        getBoardListService
       }
     }
   }) => {
@@ -44,6 +47,16 @@ const registerApisRoutes = ({
         })
       res.send('succces');
     });
+    router.get('/get-columns/:boardId', async (req, res, next) => {
+      res.send(await getBoardListService(req.params.boardId));
+    });
+    router.get('/card-move-history-report', async (req, res, next) => {
+      req.query.startDate = req.query.startDate || new Date();
+      req.query.endDate = req.query.endDate || new Date();
+      
+      res.send(await serviceGetCardMoveHistory(req.query));
+    });
+
 
 
     

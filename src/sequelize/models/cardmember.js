@@ -6,6 +6,9 @@ module.exports = (sequelize, DataTypes) => {
   }, {});
   CardMember.associate = function(models) {
     // associations can be defined here
+    CardMember.belongsTo(models.Card, {foreignKey: 'cardId'})
+    CardMember.belongsTo(models.Member, {foreignKey: 'memberId'})
+    
   };
   return CardMember;
 };
