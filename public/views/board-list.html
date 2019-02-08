@@ -37,8 +37,9 @@
         response.forEach(board => {
             var generateReport = board.isAdmin ? '' : '';
             var checklistTool = board.isAdmin ? '' : '';
-            var updateButton = board.isAdmin ? `<button class="btn btn-success update-board" data-board-url="${board.url}">Setup Board</button>` : '';
-            content += `<tr><td>${board.name}</td><td>${updateButton}</td></tr>`
+            var boardName = board.found ? `<a href="${board.id}/details.html">${board.name}</a>` : board.name;
+            var updateButton = board.isAdmin && !board.found ? `<button class="btn btn-success update-board" data-board-url="${board.url}">Setup Board</button>` : '';
+            content += `<tr><td>${boardName}</td><td>${updateButton}</td></tr>`
         });
         $('.board-list').html(content);
     })

@@ -13,6 +13,7 @@ const cardMoveHistoryRepo = ({
     where: {
       cardId,
     },
+    attributes: ['listFromId', 'ListToId'],
     order: [['createdAt', 'DESC']],
   });
 

@@ -8,7 +8,7 @@ module.exports = (sequelize, DataTypes) => {
     accessToken: DataTypes.STRING,
     accessTokenSecret: DataTypes.STRING,
     tokenMemberId: DataTypes.STRING,
-    
+    developmentDoneListId: DataTypes.STRING,
   }, {});
   Board.associate = function(models) {
     // associations can be defined here

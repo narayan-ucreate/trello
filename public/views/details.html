@@ -14,11 +14,11 @@
 .list-group-item:hover, a.list-group-item:focus {text-decoration: none;background-color: rgb(245, 245, 245);}
 .list-group { margin-bottom:0px; }
 </style>
-<script src="js/global.js"></script>
+<script src="../js/global.js"></script>
 <div class="container">
     <div class="row">
         <div class="">
-            <div class="panel panel-primary">
+            <div class="panel panel-primary report-section">
                 <div class="panel-heading">
                     Boards Report
                     <div class="pull-right action-buttons">
@@ -53,8 +53,9 @@
                         <td><br><button class="btn btn-success" id="get-report"> Get Report </button></td>
                     </tr>
                 </table>
+                
                 <div class="panel-body">
-                    <table class="table table-bordered">
+                    <table class="table table-bordered report-section">
                         <thead>
                             <tr>
                                 <th>
@@ -74,6 +75,31 @@
                         </tbody>
                     </table>
                 </div>
+
+            </div>
+            <div class="panel panel-primary setting-section hide">
+            <div class="panel-body">
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                           
+
+                            <th>Please select column (in which you want to check card checklist while moving to specific column)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr >
+                            <td> 
+                                <select class="form-control" id="development_done_list_id">
+
+                                </select>
+                                <br>
+                                <button class="btn btn-success" id="update_column">Update</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
             </div>
         </div>
     </div>
@@ -83,13 +109,23 @@
         var url = location.href;
         url = url.split('/');
         var boardId = url[url.length - 2];
-        var website_url = base_url+'/api';
+        var website_url = base_url+'api';
         $.get(website_url + '/get-columns/' + boardId, function (response) {
             var content = '';
-            response.forEach(function (list) {
+            response.lists.forEach(function (list) {
                 content += `<option value="${list.id}">${list.name}</option>`;
             });
-            $('.list-items').html(content);
+            console.log(response);
+            if (!response.boardInfo.developmentDoneListId) {
+               var dropdown = content;
+               $('.report-section').addClass('hide')
+               $('.setting-section').removeClass('hide')
+               $('#development_done_list_id').html(dropdown);
+               
+            } else {
+                $('.list-items').html(content);
+            }
+           
         })
 
         $('#get-report').on('click', function () {
@@ -105,5 +141,15 @@
                     $('.result').html(content);
                 })
         });
+
+        $('#update_column').on('click', function() {
+            var developmentDoneListId = $('#development_done_list_id option:selected').val();
+
+            $.post(website_url + '/update-development-done-column/' + boardId + '?developmentDoneListId='+developmentDoneListId, function() {
+                location.reload;
+            })
+        })
+
+        //update-development-done-column
     })
 </script>

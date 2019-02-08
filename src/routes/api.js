@@ -4,7 +4,7 @@ const registerApisRoutes = ({
   router,
   registeredServices: {
     cardMoveHistoryService: { serviceGetCardMoveHistory },
-    boardService: { getBoardsService, createBoardIfNotExistApi, updateColumn },
+    boardService: { getBoardsService, createBoardIfNotExistApi, updateColumn,getBoardInfo },
     trelloService: {
       getTrelloBoardDetails,
       createTrelloLabelIfNotExist,
@@ -47,8 +47,16 @@ const registerApisRoutes = ({
     res.send('succces');
   });
   router.get('/get-columns/:boardId', async (req, res) => {
-    res.send(await getBoardListService(req.params.boardId));
+    const { boardInfo } = await getBoardInfo(req.params.boardId);
+    const lists = await getBoardListService(req.params.boardId);
+    res.send({ boardInfo, lists });
   });
+  router.post('/update-development-done-column/:boardId', async (req, res) => {
+    const { developmentDoneListId } = req.query;
+    await updateColumn({ developmentDoneListId }, req.params.boardId);
+    res.send('success');
+  });
+
   router.get('/card-move-history-report', async (req, res) => {
     req.query.startDate = req.query.startDate || new Date();
     req.query.endDate = req.query.endDate || new Date();

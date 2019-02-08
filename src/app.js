@@ -20,6 +20,9 @@ const createApp = ({
 }) => {
   const registerRoutes = ({ app, express, registeredServices }) => {
     const router = express.Router();
+    app.get('/', (req, res) => {
+      res.sendFile(path.join(__dirname, '../public/views/login.html'));
+    });
     app.use('/trello/', registerWebHooksRoutes({
       router,
       registeredServices,
@@ -28,14 +31,22 @@ const createApp = ({
       router,
       registeredServices,
     }));
-
+    app.use((req, res, next) => {
+      const authenticated = !!req.session.accessToken;
+      console.log(authenticated);
+      if (!authenticated) {
+        res.writeHead(301,
+        { Location: '/' });
+        res.end();
+      } else {
+        next();
+      }
+    });
     app.use('/api/', registerApisRoutes({
       router,
       registeredServices,
     }));
-    app.get('/', (req, res) => {
-      res.sendFile(path.join(__dirname, '../public/views/login.html'));
-    });
+    
     app.get('/index.html', (req, res) => {
       res.sendFile(path.join(__dirname, '../public/views/index.html'));
     });

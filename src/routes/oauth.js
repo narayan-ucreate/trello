@@ -17,6 +17,7 @@ const registerOauthRoutes = ({
   const appName = 'Trello OAuth Example';
   // Trello redirects the user here after authentication
   const loginCallback = process.env.BASE_URL+'/oauth/callback';
+  console.log(loginCallback);
 
   // You should have {"token": "tokenSecret"} pairs in a real application
   // Storage should be more permanent (redis would be a good choice)
@@ -114,6 +115,7 @@ const registerOauthRoutes = ({
         isAdmin: board.isAdmin,
         accessToken: found && updatedBoardInfo.accessToken,
         accessTokenSecret: found && updatedBoardInfo.accessTokenSecret || false,
+        found,
       };
     });
     res.send(syncBoards);
