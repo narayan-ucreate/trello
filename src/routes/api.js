@@ -4,7 +4,9 @@ const registerApisRoutes = ({
   router,
   registeredServices: {
     cardMoveHistoryService: { serviceGetCardMoveHistory },
-    boardService: { getBoardsService, createBoardIfNotExistApi, updateColumn,getBoardInfo },
+    boardService: {
+      getBoardsService, createBoardIfNotExistApi, updateColumn, getBoardInfo,
+    },
     trelloService: {
       getTrelloBoardDetails,
       createTrelloLabelIfNotExist,
@@ -27,18 +29,18 @@ const registerApisRoutes = ({
     const boardId = explodeInfo[explodeInfo.length - 2];
     const trelloToken = req.session.accessToken;
     const { id, name } = boardId && (await getTrelloBoardDetails(boardId, trelloToken));
-    
+
     id
        && (await createBoardIfNotExistApi({ id, name })) === false
        && (await createTrelloLabelIfNotExist(id, trelloToken))
        && (await createTrelloListIfNotExist(id, trelloToken))
        && (await createTrelloMemberIfNotExist(id, trelloToken))
        && (await updateColumn(
-        {
-          labelSync: true, listSync: true, memberSync: true, accessToken: req.session.accessToken, accessTokenSecret: req.session.accessTokenSecret,
-        },
-        id,
-      ))
+         {
+           labelSync: true, listSync: true, memberSync: true, accessToken: req.session.accessToken, accessTokenSecret: req.session.accessTokenSecret,
+         },
+         id,
+       ))
       && updateTrelloBoardWebHooks({
         description: '',
         callbackURL: webHookUrl,

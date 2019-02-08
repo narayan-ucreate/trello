@@ -16,7 +16,7 @@ const registerOauthRoutes = ({
   const authorizeURL = 'https://trello.com/1/OAuthAuthorizeToken';
   const appName = 'Trello OAuth Example';
   // Trello redirects the user here after authentication
-  const loginCallback = process.env.BASE_URL+'/oauth/callback';
+  const loginCallback = `${process.env.BASE_URL}/oauth/callback`;
   console.log(loginCallback);
 
   // You should have {"token": "tokenSecret"} pairs in a real application

@@ -36,7 +36,7 @@ const registerWebHooksRoutes = ({
         && (await attachTrelloLabelToCard(req.body.action.data.card.id, trelloToken));
       !cardAlreadyExist
         && (await attachTrelloMemberToCard(req.body.action.data.card.id, trelloToken));
-      
+
       boardInfo
         && boardInfo.labelSync === false
         && (await createTrelloLabelIfNotExist(id, trelloToken)); // import all labels for specific board if already not imported
