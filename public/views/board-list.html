@@ -1,0 +1,50 @@
+<link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+<script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+<script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
+<script src="js/global.js"></script>
+<div class="container">
+    <div class="row">
+        <div class="text-center">
+               
+                        <br>
+                        <!-- <a href="/oauth/login" class="btn btn-success btn-xl text-center">Login Via Trello</a> -->
+                    <table class="table table-bordered">
+                        <thead>
+                            <th>
+                                Board Name
+                            </th>
+                          
+                            <th> 
+                                Action
+                            </th>
+                        </thead>
+                        <tbody class="board-list">
+                            <tr>
+
+                            </tr>
+                        </tbody>
+                    </table>
+             
+          
+        </div>
+    </div>
+</div>
+
+<script>
+     var website_url = base_url+'oauth/get-boards'
+     var content = '';
+     $.get(website_url, function (response) {
+        response.forEach(board => {
+            var generateReport = board.isAdmin ? '' : '';
+            var checklistTool = board.isAdmin ? '' : '';
+            var updateButton = board.isAdmin ? `<button class="btn btn-success update-board" data-board-url="${board.url}">Setup Board</button>` : '';
+            content += `<tr><td>${board.name}</td><td>${updateButton}</td></tr>`
+        });
+        $('.board-list').html(content);
+    })
+
+$('body').on('click', '.update-board', function(e) {
+    e.preventDefault();
+    $.post(base_url+'api/setup-board', {boardUrl: $(this).attr('data-board-url')})
+});
+</script>

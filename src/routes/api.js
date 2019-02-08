@@ -1,68 +1,63 @@
+const { webHookUrl } = require('./../config');
+
 const registerApisRoutes = ({
-    router,
-    registeredServices : { 
-      cardMoveHistoryService : { 
-        serviceGetCardMoveHistory
-      }, 
-      boardService : { 
-        getBoardsService,
-        createBoardIfNotExistApi,
-        updateColumn
-      },
-      trelloService : {
-        getTrelloBoardDetails,
-        createTrelloLabelIfNotExist,
-        createTrelloListIfNotExist, 
-        createTrelloMemberIfNotExist,
-        updateTrelloBoardWebHooks
-      },
-      listService : {
-        getBoardListService
-      }
-    }
-  }) => {
-   const { web_hooks_url } = require('./../config');
-
-    router.get('/card-move-history', async (req, res, next) => {
-        res.send(await serviceGetCardMoveHistory(req.query))
-    });
-    router.get('/boards', async (req, res, next) => {
-      res.send(await getBoardsService());
-    });
-    router.post('/setup-board', async (req, res, next) => {
-      const { board_url } = req.body;
-      const explodeInfo = board_url.split('/');
-      const boardId = explodeInfo[explodeInfo.length - 2];
-      const { id, name } = boardId && await getTrelloBoardDetails(boardId);
-      id 
-        && await createBoardIfNotExistApi({ id, name }) === false 
-        && await createTrelloLabelIfNotExist(id)
-        && await createTrelloListIfNotExist(id)
-        && await createTrelloMemberIfNotExist(id)
-        && await updateColumn({labelSync : true, listSync : true, memberSync : true }, id)
-        && updateTrelloBoardWebHooks({
-          "description" : "",
-          "callbackURL" : web_hooks_url,
-          "idModel" : id
-        })
-      res.send('succces');
-    });
-    router.get('/get-columns/:boardId', async (req, res, next) => {
-      res.send(await getBoardListService(req.params.boardId));
-    });
-    router.get('/card-move-history-report', async (req, res, next) => {
-      req.query.startDate = req.query.startDate || new Date();
-      req.query.endDate = req.query.endDate || new Date();
-      
-      res.send(await serviceGetCardMoveHistory(req.query));
-    });
-
-
-
+  router,
+  registeredServices: {
+    cardMoveHistoryService: { serviceGetCardMoveHistory },
+    boardService: { getBoardsService, createBoardIfNotExistApi, updateColumn },
+    trelloService: {
+      getTrelloBoardDetails,
+      createTrelloLabelIfNotExist,
+      createTrelloListIfNotExist,
+      createTrelloMemberIfNotExist,
+      updateTrelloBoardWebHooks,
+    },
+    listService: { getBoardListService },
+  },
+}) => {
+  router.get('/card-move-history', async (req, res) => {
+    res.send(await serviceGetCardMoveHistory(req.query));
+  });
+  router.get('/boards', async (req, res) => {
+    res.send(await getBoardsService());
+  });
+  router.post('/setup-board', async (req, res) => {
+    const { boardUrl } = req.body;
+    const explodeInfo = boardUrl.split('/');
+    const boardId = explodeInfo[explodeInfo.length - 2];
+    const trelloToken = req.session.accessToken;
+    const { id, name } = boardId && (await getTrelloBoardDetails(boardId, trelloToken));
     
-    return router;
-  };
-  module.exports = {
-    registerApisRoutes,
-  };
-  
+    id
+       && (await createBoardIfNotExistApi({ id, name })) === false
+       && (await createTrelloLabelIfNotExist(id, trelloToken))
+       && (await createTrelloListIfNotExist(id, trelloToken))
+       && (await createTrelloMemberIfNotExist(id, trelloToken))
+       && (await updateColumn(
+        {
+          labelSync: true, listSync: true, memberSync: true, accessToken: req.session.accessToken, accessTokenSecret: req.session.accessTokenSecret,
+        },
+        id,
+      ))
+      && updateTrelloBoardWebHooks({
+        description: '',
+        callbackURL: webHookUrl,
+        idModel: id,
+      }, trelloToken);
+    res.send('succces');
+  });
+  router.get('/get-columns/:boardId', async (req, res) => {
+    res.send(await getBoardListService(req.params.boardId));
+  });
+  router.get('/card-move-history-report', async (req, res) => {
+    req.query.startDate = req.query.startDate || new Date();
+    req.query.endDate = req.query.endDate || new Date();
+
+    res.send(await serviceGetCardMoveHistory(req.query));
+  });
+
+  return router;
+};
+module.exports = {
+  registerApisRoutes,
+};

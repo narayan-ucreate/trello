@@ -1,23 +1,20 @@
-const boardRepo = ({ sequelize : { Board } }) => {
-    const isBoardAlreadyExist = (id) => {
-        return Board.count({ where: { id } })
-    }
-    const createBoard = (data) => {
-        return Board.create(data)
-    }
-    const boardInfo = (id) => {
-        return Board.findOne({where : { id } });
-    }
+const boardRepo = ({ sequelize: { Board } }) => {
+  const isBoardAlreadyExist = id => Board.count({ where: { id } });
+  const createBoard = data => Board.create(data);
+  const boardInfo = id => Board.findOne({ where: { id } });
 
-    const updateSyncColumn = (data, id) => {
-        return Board.update(data, { where : { id } });
-    }
+  const updateSyncColumn = (data, id) => Board.update(data, { where: { id } });
 
-    const getBoards = () => {
-        return Board.findAll();
-    }
-    
-    return { isBoardAlreadyExist, createBoard, boardInfo, updateSyncColumn, getBoards }
-}
+  const getBoards = () => Board.findAll();
+  const getSpecificBoards = boardIds => Board.findAll({ where: { id: boardIds } });
+  return {
+    isBoardAlreadyExist,
+    createBoard,
+    boardInfo,
+    updateSyncColumn,
+    getBoards,
+    getSpecificBoards,
+  };
+};
 
-module.exports = { boardRepo }
+module.exports = { boardRepo };

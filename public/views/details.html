@@ -14,6 +14,7 @@
 .list-group-item:hover, a.list-group-item:focus {text-decoration: none;background-color: rgb(245, 245, 245);}
 .list-group { margin-bottom:0px; }
 </style>
+<script src="js/global.js"></script>
 <div class="container">
     <div class="row">
         <div class="">
@@ -82,7 +83,7 @@
         var url = location.href;
         url = url.split('/');
         var boardId = url[url.length - 2];
-        var website_url = 'https://ucreate-trello.herokuapp.com/api';
+        var website_url = base_url+'/api';
         $.get(website_url + '/get-columns/' + boardId, function (response) {
             var content = '';
             response.forEach(function (list) {

@@ -1,13 +1,8 @@
-const labelRepo = ({ sequelize : { Label } }) => {
-    const isLabelAlreadyExist = (id) => {
-        return Label.count({ where: { id } })
-    }
-    const createLabel = (data) => {
-        return Label.create(data)
-    }
-    
-    
-    return { isLabelAlreadyExist, createLabel }
-}
+const labelRepo = ({ sequelize: { Label } }) => {
+  const isLabelAlreadyExist = id => Label.count({ where: { id } });
+  const createLabel = data => Label.create(data);
 
-module.exports = { labelRepo }
+  return { isLabelAlreadyExist, createLabel };
+};
+
+module.exports = { labelRepo };

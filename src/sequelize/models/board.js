@@ -4,7 +4,10 @@ module.exports = (sequelize, DataTypes) => {
     name: DataTypes.STRING,
     memberSync: DataTypes.BOOLEAN,
     labelSync: DataTypes.BOOLEAN,
-    listSync:  DataTypes.BOOLEAN
+    listSync:  DataTypes.BOOLEAN,
+    accessToken: DataTypes.STRING,
+    accessTokenSecret: DataTypes.STRING,
+    tokenMemberId: DataTypes.STRING,
     
   }, {});
   Board.associate = function(models) {
